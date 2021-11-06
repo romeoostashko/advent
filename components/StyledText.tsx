@@ -5,14 +5,16 @@ export const StyledText = ({
 	children,
 	align = "center",
 	color = "black",
-	size = 22,
+	size = 20,
 	width = null,
+	marginTop = 0,
 }: {
 	children: React.ReactNode;
 	align?: string;
 	color?: string;
 	size?: number;
 	width?: number | string | null;
+	marginTop?: number;
 }) => {
 	return (
 		<Text
@@ -22,6 +24,7 @@ export const StyledText = ({
 				fontSize: size,
 				textAlign: align,
 				color: color,
+				marginTop: marginTop,
 			}}
 		>
 			{children}

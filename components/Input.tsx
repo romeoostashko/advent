@@ -6,16 +6,19 @@ export const Input = ({
 	placeholder = "text",
 	marginTop = 0,
 	width = "100%",
+	defValue = "",
+	value = "",
 }: {
 	onChangeText: (text: string) => void;
-	placeholder: string;
-	marginTop: number;
-	width: number | string | null;
+	placeholder?: string;
+	marginTop?: number;
+	width?: number | string | null;
+	defValue?: string;
+	value: string;
 }) => {
-	const [inputData, setInputData] = useState<String>("");
+	const [inputData, setInputData] = useState<String>(defValue);
 
 	const textHandler = (text: string) => {
-		setInputData(text);
 		onChangeText(text);
 	};
 
@@ -23,9 +26,9 @@ export const Input = ({
 		<View
 			style={{
 				width: width,
-				height: 48,
+				height: 52,
 				backgroundColor: "rgba(255,255,255,0.6)",
-				borderRadius: 12,
+				borderRadius: 8,
 				marginTop: marginTop,
 			}}
 		>
@@ -34,13 +37,13 @@ export const Input = ({
 				maxLength={18}
 				style={{
 					width: "100%",
-					height: 48,
+					height: 52,
 					paddingHorizontal: 8,
 					fontFamily: "philosopher-regular",
 					fontSize: 20,
 				}}
-				onChangeText={setInputData}
-				value={inputData}
+				onChangeText={textHandler}
+				value={value}
 			/>
 		</View>
 	);

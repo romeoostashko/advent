@@ -1,17 +1,45 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const storeMyLoginData = async (obj: { name: string; id: string }) => {
+export const storeUserLS = async (obj: {
+	name?: string;
+	password?: string;
+	photo?: string;
+	id?: string;
+}) => {
 	try {
 		const jsonObj = JSON.stringify(obj);
-		await AsyncStorage.setItem("storage_my_login_data", jsonObj);
+		await AsyncStorage.setItem("userData", jsonObj);
 	} catch (e) {
 		// saving error
 	}
 };
 
-export const getMyLoginData = async () => {
+export const getUserLS = async () => {
 	try {
-		const jsonValue = await AsyncStorage.getItem("storage_my_login_data");
+		const jsonValue = await AsyncStorage.getItem("userData");
+		return jsonValue != null ? JSON.parse(jsonValue) : null;
+	} catch (e) {
+		// error reading value
+	}
+};
+
+////////////////////////////////////////////////////////////
+
+export const storeMyCommunity = async (value: {
+	name: string;
+	password: string;
+}) => {
+	try {
+		const jsonValue = JSON.stringify(value);
+		await AsyncStorage.setItem("MyCommunity", jsonValue);
+	} catch (e) {
+		// saving error
+	}
+};
+
+export const getMyCommunity = async () => {
+	try {
+		const jsonValue = await AsyncStorage.getItem("MyCommunity");
 		return jsonValue != null ? JSON.parse(jsonValue) : null;
 	} catch (e) {
 		// error reading value
