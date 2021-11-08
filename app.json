@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "advent",
+    "name": "Advent",
     "slug": "advent",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -19,13 +19,22 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.romanostash.advent"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

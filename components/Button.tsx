@@ -8,14 +8,17 @@ export const Button = ({
 	title,
 	onPress = () => {},
 	width = "100%",
+	disabled = false,
 }: {
 	marginTop?: number;
 	title: string;
 	onPress?: () => void;
 	width?: number | string | null;
+	disabled?: boolean;
 }) => {
 	return (
 		<TouchableOpacity
+			disabled={disabled}
 			onPress={onPress}
 			style={{ width: width, height: 52, marginTop: marginTop }}
 		>

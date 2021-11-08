@@ -27,6 +27,7 @@ import {
 	AddNewClub,
 	SelectCommunity,
 	StartScreen,
+	Editor,
 } from "../screens";
 
 import {
@@ -120,6 +121,11 @@ function HomeNavigator() {
 			<Home.Screen
 				name="TabTwo"
 				component={TabTwoScreen}
+				options={{ headerShown: false }}
+			/>
+			<Home.Screen
+				name="Editor"
+				component={Editor}
 				options={{ headerShown: false }}
 			/>
 		</Home.Navigator>

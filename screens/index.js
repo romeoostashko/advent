@@ -6,3 +6,5 @@ export { TabOneScreen } from "./TabOneScreen";
 export { AddNewClub } from "./AddNewClub";
 export { SelectCommunity } from "./SelectCommunity";
 export { StartScreen } from "./StartScreen";
+
+export { Editor } from "./Editor/Editor";

@@ -8,6 +8,10 @@ export const Input = ({
 	width = "100%",
 	defValue = "",
 	value = "",
+	height = 52,
+	maxLength = 18,
+	multiline = false,
+	onFocus = () => {},
 }: {
 	onChangeText: (text: string) => void;
 	placeholder?: string;
@@ -15,6 +19,10 @@ export const Input = ({
 	width?: number | string | null;
 	defValue?: string;
 	value: string;
+	height?: number;
+	maxLength?: number;
+	multiline?: boolean;
+	onFocus?: () => void;
 }) => {
 	const [inputData, setInputData] = useState<String>(defValue);
 
@@ -26,18 +34,20 @@ export const Input = ({
 		<View
 			style={{
 				width: width,
-				height: 52,
+				height: height,
 				backgroundColor: "rgba(255,255,255,0.6)",
 				borderRadius: 8,
 				marginTop: marginTop,
 			}}
 		>
 			<TextInput
+				onFocus={onFocus}
 				placeholder={placeholder}
-				maxLength={18}
+				maxLength={maxLength}
+				multiline={multiline}
 				style={{
 					width: "100%",
-					height: 52,
+					height: height,
 					paddingHorizontal: 8,
 					fontFamily: "philosopher-regular",
 					fontSize: 20,
