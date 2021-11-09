@@ -27,6 +27,7 @@ export type ReduxType = {
 				description?: string;
 				status?: boolean;
 				feedBack?: boolean;
+				makePhoto?: boolean;
 			}
 		];
 	};
@@ -45,6 +46,7 @@ type TaskFromEditor = {
 			description?: string;
 			status?: boolean;
 			feedBack?: boolean;
+			makePhoto?: boolean;
 		}
 	];
 };

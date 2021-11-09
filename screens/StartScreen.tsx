@@ -14,14 +14,14 @@ export const StartScreen = ({ navigation }) => {
 				const community = await getMyCommunity();
 				console.log("Start community ", community);
 				setMycommunityRedux(community)(dispatch);
-				return community.name;
+				return community?.name;
 			};
 
 			const getUserFromLocalStorageToRedux = async () => {
 				const userLS = await getUserLS();
 				console.log("Start userLS ", userLS);
 				setUserRedux(userLS)(dispatch);
-				return userLS.name;
+				return userLS?.name;
 			};
 			const myCommunity = await getmyCommunityFromLocalStorageToRedux();
 			const user = await getUserFromLocalStorageToRedux();

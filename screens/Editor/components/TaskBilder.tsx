@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Keyboard } from "react-native";
 import { StyledText, CustomPicker, Input, CheckBox } from "../../../components";
+import { VideoType } from "./VideoType";
+import { TextType } from "./TextType";
+import { PhotoType } from "./PhotoType";
 export const TaskBilder = ({
 	setType,
 	type,
@@ -12,6 +15,9 @@ export const TaskBilder = ({
 	keyboardStatus,
 	setFeedBack,
 	feedBack,
+	makePhoto,
+	setMakePhoto,
+	errorMessage,
 }: {
 	setType: () => void;
 	type: string;
@@ -23,6 +29,9 @@ export const TaskBilder = ({
 	keyboardStatus: boolean;
 	feedBack: boolean;
 	setFeedBack: () => void;
+	makePhoto: boolean;
+	setMakePhoto: () => void;
+	errorMessage: string;
 }) => {
 	return (
 		<>
@@ -37,49 +46,49 @@ export const TaskBilder = ({
 						values={[
 							{ value: "not selected", label: "Виберіть із списку" },
 							{ value: "video", label: "Відео" },
-							{ value: "Readtext", label: "Текст" },
-							{ value: "action", label: "Дія" },
+							{ value: "photo", label: "Фото/Дія" },
+							{ value: "text", label: "Текст/Дія" },
 						]}
 					/>
+					{!!errorMessage && (type === "not selected" || type === "") && (
+						<StyledText size={14} color="#f56e27" marginTop={2}>
+							{errorMessage}
+						</StyledText>
+					)}
 				</>
 			)}
 			{type === "video" && (
-				<>
-					<StyledText size={16} color="white" marginTop={16}>
-						Опишіть завдання (текст завдання)
-					</StyledText>
-					<Input
-						marginTop={4}
-						multiline
-						maxLength={180}
-						height={keyboardStatus ? "50%" : 80}
-						placeholder="Опис завдання"
-						onChangeText={setDescription}
-						value={description}
-					/>
-
-					<>
-						<StyledText size={14} color="white" marginTop={16}>
-							Посилання на youtube у форматі https://youtu.be/v0Bkxc3YeIc. В
-							результаті ви отримаєте тільки код відео
-						</StyledText>
-						<Input
-							marginTop={4}
-							maxLength={80}
-							placeholder="url"
-							onChangeText={setVideoURL}
-							value={videoURL}
-						/>
-						{!keyboardStatus && (
-							<CheckBox
-								isChecked={feedBack}
-								onChange={() => setFeedBack((prev) => !prev)}
-								marginTop={16}
-								title="Дати можливість написати відгук про завдання"
-							/>
-						)}
-					</>
-				</>
+				<VideoType
+					keyboardStatus={keyboardStatus}
+					feedBack={feedBack}
+					setFeedBack={setFeedBack}
+					videoURL={videoURL}
+					setVideoURL={setVideoURL}
+					setDescription={setDescription}
+					description={description}
+					errorMessage={errorMessage}
+				/>
+			)}
+			{type === "text" && (
+				<TextType
+					keyboardStatus={keyboardStatus}
+					feedBack={feedBack}
+					setFeedBack={setFeedBack}
+					setDescription={setDescription}
+					description={description}
+					errorMessage={errorMessage}
+				/>
+			)}
+			{type === "photo" && (
+				<PhotoType
+					keyboardStatus={keyboardStatus}
+					feedBack={feedBack}
+					setFeedBack={setFeedBack}
+					setDescription={setDescription}
+					description={description}
+					makePhoto={makePhoto}
+					errorMessage={errorMessage}
+				/>
 			)}
 		</>
 	);

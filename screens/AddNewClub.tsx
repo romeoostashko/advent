@@ -72,7 +72,7 @@ export const AddNewClub = ({ navigation }: { navigation: Navigation }) => {
 		await createNewCommunity(communityName, password);
 		setCommunityName("");
 		setPassword("");
-		navigation.navigate("SelectCommunity");
+		navigation.replace("Login");
 	};
 
 	return (

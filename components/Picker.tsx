@@ -5,10 +5,12 @@ export const CustomPicker = ({
 	selectedValue,
 	onValueChange,
 	values,
+	itemStyle = {},
 }: {
 	values: { label: string; value: string | number }[];
 	selectedValue: string | number;
 	onValueChange: (a: string | number) => void;
+	itemStyle?: object;
 }) => {
 	return (
 		<Picker
@@ -21,6 +23,7 @@ export const CustomPicker = ({
 					key={item.value.toString()}
 					label={item.label.toString()}
 					value={item.value.toString()}
+					color={item?.color?.toString()}
 				/>
 			))}
 		</Picker>

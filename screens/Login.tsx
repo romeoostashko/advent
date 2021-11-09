@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
 	StyleSheet,
 	Text,
@@ -10,6 +10,7 @@ import {
 	Keyboard,
 	TouchableWithoutFeedback,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { getAllUsersByCommunity } from "../api/api";
 import { Picker } from "@react-native-picker/picker";
 import { useSelector, useDispatch } from "react-redux";
@@ -28,22 +29,23 @@ export const Login = ({ navigation }: { navigation: any }) => {
 	const [userName, setUserName] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 
-	useEffect(() => {
-		const getAllUsers = async () => {
-			const allUsersFromServer = await getAllUsersByCommunity(
-				communityObj?.name
-			);
-			const arrayUsersData = Object?.values(
-				allUsersFromServer?.data || {}
-			)?.map((item: any) => ({
+	useFocusEffect(
+		useCallback(() => {
+			getAllUsers();
+		}, [])
+	);
+
+	const getAllUsers = async () => {
+		const allUsersFromServer = await getAllUsersByCommunity(communityObj?.name);
+		const arrayUsersData = Object?.values(allUsersFromServer?.data || {})?.map(
+			(item: any) => ({
 				...Object?.entries(item)[0][1],
 				id: Object?.entries(item)[0][0],
-			}));
+			})
+		);
 
-			setUsers(arrayUsersData);
-		};
-		getAllUsers();
-	}, []);
+		setUsers(arrayUsersData);
+	};
 
 	//***************************************************
 	const [keyboardStatus, setKeyboardStatus] = useState(false);
@@ -65,7 +67,10 @@ export const Login = ({ navigation }: { navigation: any }) => {
 
 	const validation = async () => {
 		setErrorMessage("");
-
+		if (!userName) {
+			setErrorMessage("Виберіть ім'я");
+			return true;
+		}
 		if (password?.length < 3) {
 			setErrorMessage("Пароль повинен містити мінімум 3 символи");
 			return true;
@@ -136,13 +141,14 @@ export const Login = ({ navigation }: { navigation: any }) => {
 							color="rgba(255,255,255,0.7)"
 							size={16}
 						>
-							Введіть ім'я, яке ви раніше зареєстрували в програмі
+							Виберіть ім'я, яке ви раніше зареєстрували в програмі
 						</StyledText>
 						<Picker
 							style={styles.picker}
 							selectedValue={userName}
 							onValueChange={(itemValue, itemIndex) => setUserName(itemValue)}
 						>
+							<Picker.Item key={""} label="Виберіть ім'я" value="" />
 							{users?.map((item) => (
 								<Picker.Item
 									key={item?.name}

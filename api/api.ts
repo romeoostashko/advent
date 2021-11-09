@@ -24,11 +24,11 @@ export const signUp = ({
 	password: string;
 	community: string;
 }) =>
-	axiosInstance.post(`/urers/${community}/${name}.json`, { name, password });
+	axiosInstance.post(`/users/${community}/${name}.json`, { name, password });
 
 //----
 export const getAllUsersByCommunity = (community: string) =>
-	axiosInstance.get(`/urers/${community}.json`);
+	axiosInstance.get(`/users/${community}.json`);
 
 //************************************** */
 //----- Community
@@ -36,3 +36,15 @@ export const createNewCommunity = (name: string, password: string) =>
 	axiosInstance.put(`/communities/${name}.json`, { name, password });
 
 export const getAllCommunity = () => axiosInstance.get(`/communities.json`);
+//************************************** */
+//----- Editor
+export const createNewDay = (
+	obj: object,
+	community: string,
+	name: string,
+	day: number
+) =>
+	axiosInstance.patch(`/users/${community}/${name}/tasks/day${day}.json`, obj);
+
+export const getDays = (community: string, name: string) =>
+	axiosInstance.get(`/users/${community}/${name}/tasks.json`);

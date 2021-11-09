@@ -1,6 +1,7 @@
 import React from "react";
 import { View, TouchableOpacity } from "react-native";
 import { StyledText } from "./StyledText";
+import { cleanUserLS, cleanMyCommunityLS } from "../api/asyncStorage";
 
 export const Menu = ({
 	navigation,
@@ -19,7 +20,20 @@ export const Menu = ({
 				!!setSettings && setSettings((prev) => !prev);
 			},
 		},
-		{ title: "Розлогінитись", onPress: () => {} },
+		{
+			title: "Розлогінитись",
+			onPress: async () => {
+				await cleanUserLS();
+				navigation.replace("Login");
+			},
+		},
+		{
+			title: "Вийти з туси",
+			onPress: async () => {
+				await cleanMyCommunityLS();
+				navigation.replace("SelectCommunity");
+			},
+		},
 	];
 
 	return (

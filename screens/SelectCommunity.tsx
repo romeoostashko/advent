@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
 	StyleSheet,
 	Text,
@@ -10,6 +10,7 @@ import {
 	Keyboard,
 	TouchableWithoutFeedback,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
 import { signUp, getAllCommunity } from "../api/api";
 import {
@@ -49,20 +50,31 @@ export const SelectCommunity = ({ navigation }: { navigation: Navigation }) => {
 	}, []);
 	//***************************************************
 
+	useFocusEffect(
+		useCallback(() => {
+			getCommunitiesFromServer();
+		}, [])
+	);
+
 	const getCommunitiesFromServer = async () => {
 		const allCommunities = await getAllCommunity();
 		setDataRender(Object?.values(allCommunities?.data || {}));
 	};
 
-	useEffect(() => {
+	/*useEffect(() => {
 		getCommunitiesFromServer();
-	}, []);
+	}, []);*/
 
 	const submit = async () => {
 		setErrorMessage("");
 
 		//region VALIDATION *******************************
 		//***************************************************
+
+		if (!selected) {
+			setErrorMessage("Ви не вибрали вашу тусовку!");
+			return;
+		}
 		if (password?.length < 3) {
 			setErrorMessage("Пароль повинен містити мінімум 3 символи");
 			return;
@@ -86,7 +98,7 @@ export const SelectCommunity = ({ navigation }: { navigation: Navigation }) => {
 
 		setMycommunityRedux(obj)(dispatch);
 		await storeMyCommunity(obj);
-		navigation.navigate("Login");
+		navigation.replace("Login");
 	};
 
 	const image = require("../assets/images/LoginBG.png");
@@ -135,6 +147,7 @@ export const SelectCommunity = ({ navigation }: { navigation: Navigation }) => {
 							selectedValue={selected}
 							onValueChange={(itemValue, itemIndex) => setSelected(itemValue)}
 						>
+							<Picker.Item key={""} label="Виберіть вашу тусовку" value="" />
 							{dataRender?.map((item) => (
 								<Picker.Item
 									key={item?.name}

@@ -14,6 +14,15 @@ export const storeUserLS = async (obj: {
 	}
 };
 
+export const cleanUserLS = async () => {
+	try {
+		const jsonObj = JSON.stringify({});
+		await AsyncStorage.setItem("userData", jsonObj);
+	} catch (e) {
+		// saving error
+	}
+};
+
 export const getUserLS = async () => {
 	try {
 		const jsonValue = await AsyncStorage.getItem("userData");
@@ -32,6 +41,15 @@ export const storeMyCommunity = async (value: {
 	try {
 		const jsonValue = JSON.stringify(value);
 		await AsyncStorage.setItem("MyCommunity", jsonValue);
+	} catch (e) {
+		// saving error
+	}
+};
+
+export const cleanMyCommunityLS = async () => {
+	try {
+		const jsonObj = JSON.stringify({});
+		await AsyncStorage.setItem("MyCommunity", jsonObj);
 	} catch (e) {
 		// saving error
 	}
