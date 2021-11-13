@@ -10,6 +10,8 @@ export const TaskBilder = ({
 	progress,
 	setVideoURL,
 	videoURL,
+	setPhotoURL,
+	photoURL,
 	setDescription,
 	description,
 	keyboardStatus,
@@ -24,6 +26,8 @@ export const TaskBilder = ({
 	progress: number;
 	setVideoURL: () => void;
 	videoURL: string;
+	setPhotoURL: () => void;
+	photoURL: string;
 	setDescription: () => void;
 	description: string;
 	keyboardStatus: boolean;
@@ -46,8 +50,8 @@ export const TaskBilder = ({
 						values={[
 							{ value: "not selected", label: "Виберіть із списку" },
 							{ value: "video", label: "Відео" },
-							{ value: "photo", label: "Фото/Дія" },
-							{ value: "text", label: "Текст/Дія" },
+							{ value: "photo", label: "Фото" },
+							{ value: "text", label: "Текст" },
 						]}
 					/>
 					{!!errorMessage && (type === "not selected" || type === "") && (
@@ -77,6 +81,8 @@ export const TaskBilder = ({
 					setDescription={setDescription}
 					description={description}
 					errorMessage={errorMessage}
+					setPhotoURL={setPhotoURL}
+					photoURL={photoURL}
 				/>
 			)}
 			{type === "photo" && (
@@ -88,6 +94,8 @@ export const TaskBilder = ({
 					description={description}
 					makePhoto={makePhoto}
 					errorMessage={errorMessage}
+					setPhotoURL={setPhotoURL}
+					photoURL={photoURL}
 				/>
 			)}
 		</>

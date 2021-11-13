@@ -20,6 +20,7 @@ export type ReduxType = {
 		steps?: number;
 		task?: [
 			{
+				photoURL?: string;
 				type?: string;
 				title?: string;
 				photo?: string;
@@ -39,6 +40,7 @@ type TaskFromEditor = {
 	steps?: number;
 	task?: [
 		{
+			photoURL?: string;
 			type?: string;
 			title?: string;
 			photo?: string;

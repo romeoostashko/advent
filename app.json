@@ -1,42 +1,47 @@
 {
-	"expo": {
-		"name": "Advent",
-		"slug": "advent",
-		"version": "0.1.0",
-		"orientation": "portrait",
-		"icon": "./assets/images/new-icon.png",
-		"scheme": "myapp",
-		"userInterfaceStyle": "automatic",
-		"splash": {
-			"image": "./assets/images/HomeBG2.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
-		},
-		"updates": {
-			"fallbackToCacheTimeout": 0
-		},
-		"assetBundlePatterns": ["**/*"],
-		"ios": {
-			"supportsTablet": true,
-			"infoPlist": {
-				"NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera",
-				"NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
-			}
-		},
-		"android": {
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/images/new-icon.png",
-				"backgroundColor": "#ffffff"
-			},
-			"permissions": [
-				"android.permission.CAMERA",
-				"android.permission.RECORD_AUDIO"
-			],
-			"package": "com.romanostash.advent"
-		},
-		"web": {
-			"favicon": "./assets/images/favicon.png"
-		},
-		"plugins": ["expo-camera"]
-	}
+  "expo": {
+    "name": "Advent",
+    "slug": "advent",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/new-icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/HomeBG2.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/new-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.romanostash.advent"
+    },
+    "web": {
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-camera"
+    ],
+    "description": ""
+  }
 }

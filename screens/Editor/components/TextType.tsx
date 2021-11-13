@@ -8,6 +8,8 @@ export const TextType = ({
 	setDescription,
 	description,
 	errorMessage,
+	setPhotoURL,
+	photoURL,
 }: {
 	keyboardStatus: boolean;
 	feedBack: boolean;
@@ -15,16 +17,29 @@ export const TextType = ({
 	setDescription: () => void;
 	description: string;
 	errorMessage: string;
+	setPhotoURL: () => void;
+	photoURL: string;
 }) => {
 	return (
 		<>
 			<StyledText size={16} color="white" marginTop={16}>
-				Опишіть завдання (текст) 180 симв.
+				URL фото для показу в завданні, або залишіть пустим
+			</StyledText>
+			<Input
+				marginTop={4}
+				maxLength={280}
+				height={52}
+				placeholder="фото URL"
+				onChangeText={setPhotoURL}
+				value={photoURL}
+			/>
+			<StyledText size={16} color="white" marginTop={16}>
+				Опишіть завдання (текст) 280 симв.
 			</StyledText>
 			<Input
 				marginTop={4}
 				multiline
-				maxLength={180}
+				maxLength={280}
 				height={keyboardStatus ? "50%" : 80}
 				placeholder="Опис завдання"
 				onChangeText={setDescription}

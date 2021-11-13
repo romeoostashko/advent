@@ -40,6 +40,7 @@ export const Editor = ({ navigation }) => {
 	//-
 	const [type, setType] = useState<string>("");
 	const [videoURL, setVideoURL] = useState<string>("");
+	const [photoURL, setPhotoURL] = useState<string>("");
 	const [description, setDescription] = useState<string>("");
 	const [feedBack, setFeedBack] = useState<boolean>(true);
 	const [makePhoto, setMakePhoto] = useState<boolean>(true);
@@ -64,16 +65,17 @@ export const Editor = ({ navigation }) => {
 
 	useEffect(() => {
 		getDaysFromServer();
-	}, [day]);
+	}, [day, progress]);
 
 	const getDaysFromServer = async () => {
-		const res = await getDays(community, name);
+		const res = await getDays(community);
 		setDaysCompleted(
-			Object.values(res?.data).map((item: any) => `День ${item.day}`)
+			Object?.values(res?.data || {}).map((item: any) => `День ${item.day}`)
 		);
 	};
 
 	const skipStateTask = () => {
+		setPhotoURL("");
 		setType(""), setVideoURL(""), setDescription(""), setFeedBack(true);
 	};
 
@@ -81,6 +83,11 @@ export const Editor = ({ navigation }) => {
 		setErrorMessage("");
 		const newUrl = url.split("/");
 		setVideoURL(newUrl[newUrl.length - 1]);
+	};
+
+	const photoURLHandler = (url: string) => {
+		setErrorMessage("");
+		setPhotoURL(url);
 	};
 
 	const descriptionHandler = (text: string) => {
@@ -94,6 +101,9 @@ export const Editor = ({ navigation }) => {
 	};
 
 	const submit = async () => {
+		if (!community) {
+			navigation.navigate("SelectCommunity");
+		}
 		if (progress === 0) {
 			setTaskFromEditorRedux({ day, steps })(dispatch);
 			setProgress(1);
@@ -102,6 +112,18 @@ export const Editor = ({ navigation }) => {
 			setErrorMessage("");
 			if (!type) {
 				setErrorMessage("Виберіть тип завдання");
+				return;
+			}
+
+			if (
+				!!photoURL &&
+				!(
+					photoURL.includes(".jpeg") ||
+					photoURL.includes(".png") ||
+					photoURL.includes(".jpg")
+				)
+			) {
+				setErrorMessage("Додайте URL, що закінчується на .jpeg, .jpg, .png");
 				return;
 			}
 
@@ -119,6 +141,7 @@ export const Editor = ({ navigation }) => {
 				setErrorMessage("Додайте URL");
 				return;
 			}
+
 			//endregion ******************
 			setTaskFromEditorRedux({
 				task:
@@ -137,6 +160,7 @@ export const Editor = ({ navigation }) => {
 								{
 									type,
 									description,
+									photoURL,
 									feedBack,
 									status: false,
 								},
@@ -146,6 +170,7 @@ export const Editor = ({ navigation }) => {
 								{
 									type,
 									description,
+									photoURL,
 									feedBack,
 									status: false,
 									makePhoto,
@@ -155,7 +180,8 @@ export const Editor = ({ navigation }) => {
 			setProgress((prev) => prev + 1);
 			skipStateTask();
 		} else {
-			await createNewDay(taskFromEditor, community, name, day);
+			console.log("community", community);
+			await createNewDay(taskFromEditor, community, day);
 			console.log("END and SEND to server");
 			setProgress(0);
 			setDay(1);
@@ -219,6 +245,8 @@ export const Editor = ({ navigation }) => {
 										progress={progress}
 										setVideoURL={videoURLHandler}
 										videoURL={videoURL}
+										setPhotoURL={photoURLHandler}
+										photoURL={photoURL}
 										setDescription={descriptionHandler}
 										description={description}
 										keyboardStatus={keyboardStatus}

@@ -1,12 +1,13 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { StyledText, CustomPicker } from "../../../components";
-const valueDays = [
-	{ value: 1, label: "День 1" },
-	{ value: 2, label: "День 2" },
-	{ value: 3, label: "День 3" },
-	{ value: 4, label: "День 4" },
-];
+
+const valueDays = () => {
+	return new Array(25)
+		.fill("")
+		.map((item, i) => ({ value: i + 1, label: `День ${i + 1}` }));
+};
+
 export const ProgressZero = ({
 	setDay,
 	day,
@@ -20,7 +21,7 @@ export const ProgressZero = ({
 	steps: number;
 	daysCompleted: [];
 }) => {
-	const dayForRender = valueDays.map((i) =>
+	const dayForRender = valueDays().map((i) =>
 		daysCompleted?.includes(i.label)
 			? {
 					...i,

@@ -124,13 +124,13 @@ export const Registration = ({ navigation }: { navigation: any }) => {
 				>
 					{!keyboardStatus && (
 						<StyledText color="white" size={32}>
-							Diamant Advent
+							{communityObj?.name + " Advent"}
 						</StyledText>
 					)}
 
 					<View style={styles.form}>
 						<StyledText color="white" size={32}>
-							Реєстрація
+							Реєстрація юзера
 						</StyledText>
 						<StyledText
 							marginTop={8}

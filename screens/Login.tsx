@@ -127,7 +127,7 @@ export const Login = ({ navigation }: { navigation: any }) => {
 				>
 					{!keyboardStatus && (
 						<StyledText color="white" size={32}>
-							Diamant Advent
+							{communityObj?.name + " Advent"}
 						</StyledText>
 					)}
 

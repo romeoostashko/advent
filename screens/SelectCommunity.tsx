@@ -124,7 +124,7 @@ export const SelectCommunity = ({ navigation }: { navigation: Navigation }) => {
 				>
 					{!keyboardStatus && (
 						<StyledText color="white" size={32}>
-							Diamant Advent
+							Advent
 						</StyledText>
 					)}
 

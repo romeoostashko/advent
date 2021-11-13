@@ -5,12 +5,17 @@ import {
 	View,
 	TouchableOpacity,
 	Image,
+	ImageBackground,
 	LogBox,
+	ActivityIndicator,
 } from "react-native";
 import { getApps, initializeApp } from "firebase/app";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import uuid from "react-native-uuid";
+import { StyledText, Button } from "../components";
 import { Camera } from "expo-camera";
+import { AntDesign } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyDn9QspiwR1l_UGUpkpmROtKF4lN1NVXho",
@@ -28,12 +33,37 @@ initializeApp(firebaseConfig);
 // Firebase sets some timeers for a long period, which will trigger some warnings. Let's turn that off for this example
 LogBox.ignoreLogs([`Setting a timer for a long period`]);
 
-export const MyCamera = () => {
+export const MyCamera = ({ setIsCameraLaunch, setUrlPhotoFromUser }) => {
 	const CameraRef = useRef(null);
 	const [hasPermission, setHasPermission] = useState(null);
 	const [type, setType] = useState(Camera.Constants.Type.back);
 	const [isRatioSet, setIsRatioSet] = useState(false);
 	const [uri, setUri] = useState(null);
+	const [loaded, setLoaded] = useState(false);
+
+	const makePhoto = async () => {
+		if (CameraRef.current) {
+			let photo = await CameraRef.current.takePictureAsync();
+			setUri(photo.uri);
+			//CameraRef.current.pausePreview();
+		}
+	};
+
+	const reverse = async () => {
+		setType(
+			type === Camera.Constants.Type.back
+				? Camera.Constants.Type.front
+				: Camera.Constants.Type.back
+		);
+	};
+
+	const submit = async () => {
+		setLoaded(true);
+		const uploadUrl = await uploadImageAsync(uri);
+		setUrlPhotoFromUser(uploadUrl);
+		setLoaded(false);
+		setIsCameraLaunch((prev) => !prev);
+	};
 
 	async function uploadImageAsync(uri) {
 		// Why are we using XMLHttpRequest? See:
@@ -89,39 +119,73 @@ export const MyCamera = () => {
 					type={type}
 				>
 					<View style={styles.buttonContainer}>
+						{/* reverse */}
+						<TouchableOpacity style={styles.button} onPress={reverse}>
+							<Ionicons name="camera-reverse-outline" size={24} color="white" />
+						</TouchableOpacity>
+
+						{/* Close */}
 						<TouchableOpacity
 							style={styles.button}
-							onPress={async () => {
-								/*setType(
-								type === Camera.Constants.Type.back
-									? Camera.Constants.Type.front
-									: Camera.Constants.Type.back
-							);*/
-
-								if (CameraRef.current) {
-									let photo = await CameraRef.current.takePictureAsync();
-									setUri(photo.uri);
-
-									const uploadUrl = await uploadImageAsync(photo.uri);
-									console.log(uploadUrl);
-									setUri(uploadUrl);
-
-									//CameraRef.current.pausePreview();
-								}
-							}}
+							onPress={() => setIsCameraLaunch((prev) => !prev)}
 						>
-							<Text style={styles.text}> Flip </Text>
+							<AntDesign name="close" size={24} color="white" />
 						</TouchableOpacity>
+					</View>
+
+					{/* Make Photo */}
+					<View style={{ justifyContent: "center", alignItems: "center" }}>
+						<Button
+							isIconPhoto
+							onPress={makePhoto}
+							marginBottom={16}
+							width={48}
+							height={48}
+						/>
 					</View>
 				</Camera>
 			)}
-			{uri && (
-				<Image
-					style={{ width: "100%", height: "80%" }}
+			{!!uri && (
+				<ImageBackground
+					style={{ width: "100%", height: "100%", justifyContent: "flex-end" }}
 					source={{
 						uri: uri,
 					}}
-				></Image>
+				>
+					{loaded && (
+						<>
+							<ActivityIndicator
+								size="large"
+								color="white"
+								style={{ marginBottom: 50 }}
+							/>
+							<StyledText color="white">Зберігаю...</StyledText>
+						</>
+					)}
+					<View
+						style={{
+							justifyContent: "center",
+							alignItems: "center",
+							flexDirection: "row",
+						}}
+					>
+						<Button
+							isIconPhoto
+							onPress={() => setUri("")}
+							marginBottom={16}
+							width={48}
+							height={48}
+						/>
+						<Button
+							isIconSave
+							onPress={submit}
+							marginBottom={16}
+							marginLeft={24}
+							width={48}
+							height={48}
+						/>
+					</View>
+				</ImageBackground>
 			)}
 		</View>
 	);
@@ -132,14 +196,16 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	camera: {
+		flex: 1,
 		width: "100%",
 		height: "100%",
+		justifyContent: "space-between",
 	},
 	buttonContainer: {
-		flex: 1,
 		backgroundColor: "transparent",
 		flexDirection: "row",
 		margin: 20,
+		justifyContent: "space-between",
 	},
 	button: {
 		flex: 0.1,

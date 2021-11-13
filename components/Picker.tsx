@@ -18,14 +18,16 @@ export const CustomPicker = ({
 			selectedValue={selectedValue}
 			onValueChange={(itemValue, itemIndex) => onValueChange(itemValue)}
 		>
-			{values?.map((item: { label: string; value: string | number }) => (
-				<Picker.Item
-					key={item.value.toString()}
-					label={item.label.toString()}
-					value={item.value.toString()}
-					color={item?.color?.toString()}
-				/>
-			))}
+			{values?.map(
+				(item: { label: string; value: string | number; color?: string }) => (
+					<Picker.Item
+						key={item.value.toString()}
+						label={item.label.toString()}
+						value={item.value.toString()}
+						color={item?.color?.toString() || "black"}
+					/>
+				)
+			)}
 		</Picker>
 	);
 };

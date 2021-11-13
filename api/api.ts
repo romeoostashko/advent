@@ -31,20 +31,18 @@ export const getAllUsersByCommunity = (community: string) =>
 	axiosInstance.get(`/users/${community}.json`);
 
 //************************************** */
-//----- Community
+//region[rgba(666,177,89,0.1)]Community
 export const createNewCommunity = (name: string, password: string) =>
 	axiosInstance.put(`/communities/${name}.json`, { name, password });
-
+//-----------------------
 export const getAllCommunity = () => axiosInstance.get(`/communities.json`);
-//************************************** */
-//----- Editor
-export const createNewDay = (
-	obj: object,
-	community: string,
-	name: string,
-	day: number
-) =>
-	axiosInstance.patch(`/users/${community}/${name}/tasks/day${day}.json`, obj);
 
-export const getDays = (community: string, name: string) =>
-	axiosInstance.get(`/users/${community}/${name}/tasks.json`);
+//endregion************************************** */
+
+//region [rgba(0,205,30,0.1)]Editor
+export const createNewDay = (obj: object, community: string, day: number) =>
+	axiosInstance.patch(`/communities/${community}/tasks/day${day}.json`, obj);
+//-----------------------
+export const getDays = (community: string) =>
+	axiosInstance.get(`/communities/${community}/tasks.json`);
+//endregion
