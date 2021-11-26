@@ -15,7 +15,7 @@ export default axiosInstance;
 
 //*********************************** */
 //----- Users
-export const signUp = ({
+export const signUp = async ({
 	name,
 	password,
 	community,
@@ -24,25 +24,81 @@ export const signUp = ({
 	password: string;
 	community: string;
 }) =>
-	axiosInstance.post(`/users/${community}/${name}.json`, { name, password });
+	await axiosInstance.post(`/users/${community}/${name}.json`, {
+		name,
+		password,
+	});
 
 //----
-export const getAllUsersByCommunity = (community: string) =>
-	axiosInstance.get(`/users/${community}.json`);
+export const getAllUsersByCommunity = async (community: string) =>
+	await axiosInstance.get(`/users/${community}.json`);
 
 //************************************** */
-//region[rgba(666,177,89,0.1)]Community
-export const createNewCommunity = (name: string, password: string) =>
-	axiosInstance.put(`/communities/${name}.json`, { name, password });
+//region[rgba(666,177,89,0.1)] Community
+export const createNewCommunity = async (name: string, password: string) =>
+	await axiosInstance.put(`/communities/${name}.json`, { name, password });
 //-----------------------
-export const getAllCommunity = () => axiosInstance.get(`/communities.json`);
+export const getAllCommunity = async () =>
+	await axiosInstance.get(`/communities.json`);
 
 //endregion************************************** */
 
-//region [rgba(0,205,30,0.1)]Editor
-export const createNewDay = (obj: object, community: string, day: number) =>
-	axiosInstance.patch(`/communities/${community}/tasks/day${day}.json`, obj);
+//region [rgba(0,205,30,0.1)] Editor
+export const createNewDay = async (
+	obj: object,
+	community: string,
+	day: number
+) =>
+	await axiosInstance.patch(
+		`/communities/${community}/tasks/day${day}.json`,
+		obj
+	);
 //-----------------------
-export const getDays = (community: string) =>
-	axiosInstance.get(`/communities/${community}/tasks.json`);
+export const getDays = async (community: string) =>
+	await axiosInstance.get(`/communities/${community}/tasks.json`);
+//endregion
+
+//region [rgba(0,205,366,0.1)] Progress
+
+export const setProgress = async (
+	obj: object,
+	day: number,
+	step: number,
+	community: string,
+	name: string
+) => {
+	await axiosInstance.patch(
+		`/users/${community}/${name}/progress/day${day}/${step}.json`,
+		obj
+	);
+};
+
+export const setEnd = async (day: number, community: string, name: string) => {
+	await axiosInstance.patch(
+		`/users/${community}/${name}/progress/day${day}.json`,
+		{ status: true }
+	);
+};
+
+export const clearProgress = async (
+	day: number,
+	step: number,
+	community: string,
+	name: string
+) => {
+	await axiosInstance.delete(
+		`/users/${community}/${name}/progress/day${day}.json`
+	);
+};
+
+export const getProgressDay = async (
+	day: number,
+	community: string,
+	name: string
+) => {
+	return await axiosInstance.get(
+		`/users/${community}/${name}/progress/day${day}.json`
+	);
+};
+
 //endregion

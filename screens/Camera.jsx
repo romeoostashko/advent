@@ -43,7 +43,7 @@ export const MyCamera = ({ setIsCameraLaunch, setUrlPhotoFromUser }) => {
 
 	const makePhoto = async () => {
 		if (CameraRef.current) {
-			let photo = await CameraRef.current.takePictureAsync();
+			let photo = await CameraRef.current.takePictureAsync({ quality: 0.2 });
 			setUri(photo.uri);
 			//CameraRef.current.pausePreview();
 		}

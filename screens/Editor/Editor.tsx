@@ -26,7 +26,7 @@ export const Editor = ({ navigation }) => {
 	const community = useSelector(
 		(state: ReduxType) => state?.myCommunityObj?.name
 	);
-	console.log("EDITOR=>", taskFromEditor);
+	//console.log("EDITOR=>", taskFromEditor);
 	const dispatch = useDispatch();
 	const [errorMessage, setErrorMessage] = useState<string>("");
 	const [daysCompleted, setDaysCompleted] = useState<{}[]>([]);
@@ -100,6 +100,14 @@ export const Editor = ({ navigation }) => {
 		setType(text);
 	};
 
+	const dayHandler = (day: string) => {
+		setDay(+day);
+	};
+
+	const stepHandler = (step: string) => {
+		setSteps(+step);
+	};
+
 	const submit = async () => {
 		if (!community) {
 			navigation.navigate("SelectCommunity");
@@ -120,7 +128,8 @@ export const Editor = ({ navigation }) => {
 				!(
 					photoURL.includes(".jpeg") ||
 					photoURL.includes(".png") ||
-					photoURL.includes(".jpg")
+					photoURL.includes(".jpg") ||
+					photoURL.includes("https://firebasestorage")
 				)
 			) {
 				setErrorMessage("Додайте URL, що закінчується на .jpeg, .jpg, .png");
@@ -233,9 +242,9 @@ export const Editor = ({ navigation }) => {
 								{progress === 0 ? (
 									<ProgressZero
 										daysCompleted={daysCompleted}
-										setDay={setDay}
-										day={day}
-										setSteps={setSteps}
+										setDay={dayHandler}
+										day={+day}
+										setSteps={stepHandler}
 										steps={steps}
 									/>
 								) : steps >= progress && progress > 0 ? (
@@ -258,38 +267,9 @@ export const Editor = ({ navigation }) => {
 									/>
 								) : (
 									<View style={{ alignItems: "center" }}>
-										<TouchableOpacity
-											onPress={submit}
-											style={{
-												width: "90%",
-												minHeight: 42,
-												justifyContent: "center",
-												alignItems: "center",
-												backgroundColor: "rgba(255,255,255,0.8)",
-												borderRadius: 8,
-												marginTop: 16,
-												padding: 4,
-											}}
-										>
+										<TouchableOpacity onPress={submit} style={styles.save}>
 											<StyledText size={26}>
 												Зберегти та додати ще день
-											</StyledText>
-										</TouchableOpacity>
-										<TouchableOpacity
-											onPress={() => navigation.goBack()}
-											style={{
-												width: "90%",
-												minHeight: 42,
-												justifyContent: "center",
-												alignItems: "center",
-												backgroundColor: "rgba(255,255,255,0.8)",
-												borderRadius: 8,
-												marginTop: 24,
-												padding: 4,
-											}}
-										>
-											<StyledText size={26}>
-												Зберегти та вийти з редактора
 											</StyledText>
 										</TouchableOpacity>
 									</View>
@@ -341,5 +321,15 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		position: "relative",
 		left: "42%",
+	},
+	save: {
+		width: "90%",
+		minHeight: 42,
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "rgba(255,255,255,0.8)",
+		borderRadius: 8,
+		marginTop: 16,
+		padding: 4,
 	},
 });

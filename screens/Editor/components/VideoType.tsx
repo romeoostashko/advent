@@ -23,12 +23,12 @@ export const VideoType = ({
 	return (
 		<>
 			<StyledText size={16} color="white" marginTop={16}>
-				Опишіть завдання (текст завдання) 180 симв.
+				Опишіть завдання (текст завдання) 1000 симв.
 			</StyledText>
 			<Input
 				marginTop={4}
 				multiline
-				maxLength={180}
+				maxLength={1000}
 				height={keyboardStatus ? "50%" : 80}
 				placeholder="Опис завдання"
 				onChangeText={setDescription}

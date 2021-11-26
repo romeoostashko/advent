@@ -21,6 +21,8 @@ export const ProgressZero = ({
 	steps: number;
 	daysCompleted: [];
 }) => {
+	//console.log("day", day, steps);
+
 	const dayForRender = valueDays().map((i) =>
 		daysCompleted?.includes(i.label)
 			? {
@@ -30,6 +32,7 @@ export const ProgressZero = ({
 			  }
 			: i
 	);
+
 	return (
 		<>
 			<StyledText size={16} color="white">
@@ -38,7 +41,7 @@ export const ProgressZero = ({
 			<CustomPicker
 				itemStyle={{ color: "#ccc" }}
 				onValueChange={setDay}
-				selectedValue={day}
+				selectedValue={day.toString()}
 				values={dayForRender}
 			/>
 
@@ -47,7 +50,7 @@ export const ProgressZero = ({
 			</StyledText>
 			<CustomPicker
 				onValueChange={setSteps}
-				selectedValue={steps}
+				selectedValue={steps.toString()}
 				values={[
 					{ value: 1, label: "Одне завдання" },
 					{ value: 2, label: "Два завдання" },
