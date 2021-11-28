@@ -25,7 +25,7 @@ import { RootTabScreenProps } from "../types";
 import { StyledText, Button, Menu, Input } from "../components";
 import { MyCamera } from "./Camera";
 import { Player } from "./Player";
-import { intervalToDuration, isDate } from "date-fns";
+import { intervalToDuration, isDate, formatDistance, subDays } from "date-fns";
 const image = require("../assets/images/HomeBG.png");
 
 export const TabOneScreen = ({ navigation }: RootTabScreenProps<"TabOne">) => {
@@ -39,12 +39,9 @@ export const TabOneScreen = ({ navigation }: RootTabScreenProps<"TabOne">) => {
 	});
 	const [isSettings, setSettings] = useState<boolean>(false);
 	const [days, setDays] = useState([]);
-	const [today, setToday] = useState(
-		intervalToDuration({
-			start: new Date(2021, 10, 24, 24, 0, 0),
-			end: new Date(),
-		})?.days + 1
-	);
+	const [daysBefore, setDayBefore] = useState(null);
+	const [numberDaysBefore, setNumberDayBefore] = useState(null);
+	const [today, setToday] = useState(0);
 	const [todayData, setTodayData] = useState({ task: [{ description: "" }] });
 	const [step, setStep] = useState(1);
 	const [isCameraLaunch, setIsCameraLaunch] = useState(false);
@@ -59,32 +56,47 @@ export const TabOneScreen = ({ navigation }: RootTabScreenProps<"TabOne">) => {
 	const user = useSelector((state: ReduxType) => state?.user?.name);
 
 	console.log("today", today, dayIsFinished, step);
-	const withWindow = (Dimensions.get("window").width * 0.85 * 0.9) / 4;
 
-	useFocusEffect(
-		useCallback(() => {
-			getDaysFromServer();
-		}, [])
-	);
+	console.log("> > ", daysBefore, numberDaysBefore);
+	const withWindow = (Dimensions.get("window").width * 0.85 * 0.9) / 4;
+	//console.log(new Date(2021, 11, 1, 8, 0, 0));
 
 	useEffect(() => {
 		getDaysFromServer();
-		/*setToday(
-			intervalToDuration({
-				start: new Date(2021, 10, 15, 24, 0, 0),
-				end: new Date(),
-			})?.days + 1
-		);*/
-	}, [today]);
+
+		setDayBefore(
+			formatDistance(new Date(2021, 11, 1, 8, 0, 0), new Date(), {
+				addSuffix: true,
+			}).startsWith("in")
+		);
+
+		setNumberDayBefore(
+			formatDistance(+new Date(2021, 11, 1, 8, 0, 0), new Date(), {}).slice(
+				0,
+				1
+			)
+		);
+
+		if (daysBefore === false) {
+			setToday(
+				intervalToDuration({
+					start: new Date(2021, 11, 1, 8, 0, 0),
+					end: new Date(),
+				})?.days + 1
+			);
+		}
+	}, [daysBefore, today]);
 
 	useEffect(() => {
+		if (+today > 0) {
+			getThisStatusDay();
+		}
 		setTodayData(
 			!!days?.length
 				? days?.find((item) => item?.day == today)
 				: { task: [{ description: "" }] }
 		);
-		getThisStatusDay();
-	}, [days?.length, today, step]);
+	}, [days?.length, today, step, daysBefore]);
 
 	const getDaysFromServer = async () => {
 		const res = await getDays(community);
@@ -93,7 +105,7 @@ export const TabOneScreen = ({ navigation }: RootTabScreenProps<"TabOne">) => {
 	//console.log("todayData _________ ", todayData);
 
 	const getThisStatusDay = async () => {
-		const r = await getProgressDay(today, community, user);
+		const r = await getProgressDay(+today, community, user);
 		setDayIsFinished(!!r?.data?.status ? true : false);
 	};
 
@@ -195,16 +207,19 @@ export const TabOneScreen = ({ navigation }: RootTabScreenProps<"TabOne">) => {
 		</>
 	);
 
-	const ShowImage = () => (
-		<>
-			{/****** image ********/}
-			{!!todayData?.task[step - 1]?.photoURL && (
-				<Image
-					source={{ uri: todayData?.task[step - 1]?.photoURL }}
-					style={[styles.image, { height: withWindow * 3 }]}
-				/>
-			)}
-		</>
+	const ShowImage = useCallback(
+		() => (
+			<>
+				{/****** image ********/}
+				{!!todayData?.task[step - 1]?.photoURL && (
+					<Image
+						source={{ uri: todayData?.task[step - 1]?.photoURL }}
+						style={[styles.image, { height: withWindow * 3 }]}
+					/>
+				)}
+			</>
+		),
+		[todayData?.task[step - 1]?.photoURL]
 	);
 
 	const ShowVideo = () => (
@@ -292,8 +307,8 @@ export const TabOneScreen = ({ navigation }: RootTabScreenProps<"TabOne">) => {
 		[ErrorMakePhoto]
 	);
 
-	const HeaderDay = useCallback(
-		({ day }) => (
+	const HeaderDay = ({ day }) =>
+		!daysBefore && (
 			<View
 				style={{
 					flexDirection: "row",
@@ -301,29 +316,11 @@ export const TabOneScreen = ({ navigation }: RootTabScreenProps<"TabOne">) => {
 					justifyContent: "center",
 				}}
 			>
-				<TouchableOpacity
-					onPress={() => {
-						setToday((prev) => (prev > 1 ? prev - 1 : prev));
-						getThisStatusDay();
-					}}
-				>
-					<MaterialIcons name="arrow-back-ios" size={24} color="white" />
-				</TouchableOpacity>
 				<StyledText color="white" size={42} marginLeft={12} marginRight={12}>
 					{day}
 				</StyledText>
-				<TouchableOpacity
-					onPress={() => {
-						getThisStatusDay();
-						setToday((prev) => (prev < 25 ? prev + 1 : prev));
-					}}
-				>
-					<MaterialIcons name="arrow-forward-ios" size={24} color="white" />
-				</TouchableOpacity>
 			</View>
-		),
-		[]
-	);
+		);
 
 	//---------
 	return (
@@ -405,23 +402,30 @@ export const TabOneScreen = ({ navigation }: RootTabScreenProps<"TabOne">) => {
 									<StyledText size={24} color="white" marginTop={0}>
 										Вітаю,
 									</StyledText>
-									<StyledText size={24} color="white" marginTop={0}>
+									<StyledText size={24} color="white" marginTop={16}>
 										день закінчений.
 									</StyledText>
-									<TouchableOpacity
-										onPress={clearProgressDay}
-										style={{
-											borderWidth: 2,
-											borderColor: "white",
-											width: "90%",
-											padding: 5,
-											marginTop: 8,
-										}}
-									>
-										<StyledText size={24} color="white" marginTop={0}>
-											Очистити прогрес дня
-										</StyledText>
-									</TouchableOpacity>
+								</View>
+							)}
+							{!today && daysBefore && (
+								<View>
+									<StyledText size={24} color="white" marginTop={0}>
+										Вітаю {user},
+									</StyledText>
+
+									<StyledText size={32} color="white" marginTop={8}>
+										Залишилось
+									</StyledText>
+									<StyledText size={64} color="white" marginTop={24}>
+										{numberDaysBefore}
+									</StyledText>
+									<StyledText size={32} color="white" marginTop={24}>
+										{numberDaysBefore > 4
+											? "днів"
+											: numberDaysBefore > 1
+											? "дня"
+											: "день"}
+									</StyledText>
 								</View>
 							)}
 						</View>
@@ -430,7 +434,7 @@ export const TabOneScreen = ({ navigation }: RootTabScreenProps<"TabOne">) => {
 					<Menu navigation={navigation} setSettings={setSettings} />
 				)}
 			</View>
-			{!dayIsFinished && (
+			{!dayIsFinished && !daysBefore ? (
 				<Button
 					disabled={dayIsFinished}
 					onPress={submit}
@@ -438,7 +442,7 @@ export const TabOneScreen = ({ navigation }: RootTabScreenProps<"TabOne">) => {
 					width="80%"
 					title={step + 1 <= +todayData?.steps ? `Продовжити` : `Завершити`}
 				/>
-			)}
+			) : null}
 		</ImageBackground>
 	);
 };

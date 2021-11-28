@@ -171,14 +171,7 @@ export const SelectCommunity = ({ navigation }: { navigation: Navigation }) => {
 
 						<Button marginTop={16} title="Вибрати" onPress={submit} />
 					</View>
-					{!keyboardStatus && (
-						<Link
-							onPress={() => navigation.navigate("AddNewClub")}
-							color="white"
-						>
-							Зареєструвати тусу
-						</Link>
-					)}
+					{!keyboardStatus && <Link onPress={() => {}} color="white"></Link>}
 				</KeyboardAvoidingView>
 			</TouchableWithoutFeedback>
 		</ImageBackground>

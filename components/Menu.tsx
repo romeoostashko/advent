@@ -14,13 +14,6 @@ export const Menu = ({
 }) => {
 	const menu = [
 		{
-			title: !isEditor ? "Редактор" : "Головна",
-			onPress: () => {
-				navigation.navigate(!isEditor ? "Editor" : "TabOne");
-				!!setSettings && setSettings((prev) => !prev);
-			},
-		},
-		{
 			title: "Розлогінитись",
 			onPress: async () => {
 				await cleanUserLS();
